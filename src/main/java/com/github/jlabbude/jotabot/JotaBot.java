@@ -16,7 +16,7 @@ public class JotaBot {
                 .block();
 
         client.getEventDispatcher().on(MessageCreateEvent.class)
-                .filter(event -> event.getMessage().getContent().startsWith("&")) // Filter messages starting with "!"
+                .filter(event -> event.getMessage().getContent().startsWith("&"))
                 .flatMap(event -> SlashCommandListener.execute(event, commandManager))
                 .subscribe();
 
