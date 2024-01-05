@@ -6,15 +6,15 @@ import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.channel.VoiceChannel;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public class jotaJoin implements SlashCommand {
     @Override
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
+
         Message message = event.getMessage();
-        return Mono.justOrEmpty(message.getUserMentions())
-                .flatMapMany(Flux::fromIterable)
+
+        return Mono.justOrEmpty(message.getUserMentions().stream().findFirst())
                 .flatMap(user -> event.getGuild()
                         .flatMap(guild -> guild.getMemberById(user.getId()))
                         .flatMap(Member::getVoiceState)
@@ -23,6 +23,5 @@ public class jotaJoin implements SlashCommand {
                         .then()
                 )
                 .then();
-
     }
 }
