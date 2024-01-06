@@ -13,6 +13,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
     implementation 'com.discord4j:discord4j-core:3.2.6'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 test {
