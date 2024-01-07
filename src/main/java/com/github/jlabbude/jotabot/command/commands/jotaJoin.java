@@ -9,9 +9,15 @@ import discord4j.core.object.entity.channel.VoiceChannel;
 import reactor.core.publisher.Mono;
 
 public class jotaJoin implements SlashCommand {
+
+    private final jotaStream streamCommand;
+
+    public jotaJoin(jotaStream streamCommand) {
+        this.streamCommand = streamCommand;
+    }
+
     @Override
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
-
         Message message = event.getMessage();
 
         return Mono.justOrEmpty(message.getUserMentions().stream().findFirst())
@@ -20,8 +26,10 @@ public class jotaJoin implements SlashCommand {
                         .flatMap(Member::getVoiceState)
                         .flatMap(VoiceState::getChannel)
                         .flatMap(VoiceChannel::join)
-                        .then()
                 )
-                .then();
+                .flatMap(voiceConnection -> streamCommand.execute("streamCommand", event)
+                        .then(voiceConnection.disconnect()) // Disconnect regardless of the result of streamCommand
+                        .then() // Transform the result into Mono<Void>
+                );
     }
 }
