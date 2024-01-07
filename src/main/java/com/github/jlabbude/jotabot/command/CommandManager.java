@@ -1,7 +1,8 @@
 package com.github.jlabbude.jotabot.command;
 
 import com.github.jlabbude.jotabot.command.commands.jotaJoin;
-import com.github.jlabbude.jotabot.command.commands.jotaScream;
+import com.github.jlabbude.jotabot.command.commands.jotaGrito;
+import com.github.jlabbude.jotabot.command.commands.jotaStream;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import reactor.core.publisher.Mono;
 
@@ -13,8 +14,9 @@ public class CommandManager {
 
     public CommandManager() {
         // Initialize the map with command names and their implementations
-        commands.put("jotave", new jotaScream());
-        commands.put("jotajoin", new jotaJoin());
+        commands.put("jotave", new jotaGrito());
+        jotaStream streamCommand = new jotaStream();
+        commands.put("jotajoin", new jotaJoin(streamCommand));
         // Add more commands as needed
     }
 
