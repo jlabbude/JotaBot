@@ -28,8 +28,8 @@ public class jotaJoin implements SlashCommand {
                         .flatMap(VoiceChannel::join)
                 )
                 .flatMap(voiceConnection -> streamCommand.execute("streamCommand", event)
-                        .then(voiceConnection.disconnect()) // Disconnect regardless of the result of streamCommand
-                        .then() // Transform the result into Mono<Void>
+                        .then(voiceConnection.disconnect())
+                        .then()
                 );
     }
 }
