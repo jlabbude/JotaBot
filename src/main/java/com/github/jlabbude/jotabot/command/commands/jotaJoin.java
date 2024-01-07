@@ -46,8 +46,6 @@ public class jotaJoin implements SlashCommand {
                             message.getChannel()
                                 .flatMap(channel -> channel.createMessage(elapsedString))
                                 .subscribe();
-
-                            System.out.println("Elapsed time: " + elapsedString);
                         }
                         )
                         )
