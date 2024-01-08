@@ -27,7 +27,7 @@ public class jotaJoin implements SlashCommand {
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
         AtomicReference<StopWatch> jotatimer = new AtomicReference<>();
 
-        Snowflake targetChannelSnowflake = Snowflake.of(852717593236471832L);
+        Snowflake targetChannelSnowflake = Snowflake.of(insertTargetChannelId);
         Mono<TextChannel> channelTarget = event.getClient().getChannelById(targetChannelSnowflake)
                 .cast(TextChannel.class);
 
