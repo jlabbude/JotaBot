@@ -26,8 +26,13 @@ public class JotaBot {
                 .login()
                 .block();
 
+<<<<<<< HEAD
         new jotaJoin(new jotaStream(), insertUsedId)
                 .execute("jotajoin", new MessageCreateEvent(client, null, null, insertGuildId, null))
+=======
+        new jotaJoin(new jotaStream(), insertUserId)
+                .execute("jotajoin", new MessageCreateEvent(client, null, null, insertChannelId, null))
+>>>>>>> 957fa19 (removed ids)
                 .subscribe();
 
         client.getEventDispatcher().on(MessageCreateEvent.class)
