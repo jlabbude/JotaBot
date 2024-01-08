@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: com.github.jlabbude.jotabot.JotaBot
+Class-Path: JotaBot-1.0-SNAPSHOT.jar

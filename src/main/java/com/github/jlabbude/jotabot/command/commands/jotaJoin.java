@@ -28,10 +28,14 @@ public class jotaJoin implements SlashCommand {
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
         AtomicReference<StopWatch> jotatimer = new AtomicReference<>();
 
+<<<<<<< HEAD
         AtomicReference<Snowflake> userChannelId = new AtomicReference<>();
         AtomicReference<Mono<Snowflake>> botChannelId = new AtomicReference<>();
 
-        Snowflake targetChannelSnowflake = Snowflake.of(insertchannelId);
+        Snowflake targetChannelSnowflake = Snowflake.of(insertChannelId);
+=======
+        Snowflake targetChannelSnowflake = Snowflake.of(insertTargetChannelId);
+>>>>>>> 33c7db4 (Update jotaJoin.java)
         Mono<TextChannel> channelTarget = event.getClient().getChannelById(targetChannelSnowflake)
                 .cast(TextChannel.class);
 
