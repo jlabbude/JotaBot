@@ -7,6 +7,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
+import discord4j.core.object.entity.channel.VoiceChannel;
 import org.apache.commons.lang3.time.StopWatch;
 import reactor.core.publisher.Mono;
 
@@ -27,6 +28,9 @@ public class jotaJoin implements SlashCommand {
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
         AtomicReference<StopWatch> jotatimer = new AtomicReference<>();
 
+        AtomicReference<Snowflake> userChannelId = new AtomicReference<>();
+        AtomicReference<Mono<Snowflake>> botChannelId = new AtomicReference<>();
+
         Snowflake targetChannelSnowflake = Snowflake.of(852717593236471832L);
         Mono<TextChannel> channelTarget = event.getClient().getChannelById(targetChannelSnowflake)
                 .cast(TextChannel.class);
@@ -37,17 +41,23 @@ public class jotaJoin implements SlashCommand {
                 .filter(vs -> !vs.isSelfStreaming())
                 .switchIfEmpty(Mono.empty())
                 .flatMap(VoiceState::getChannel)
+                .doOnNext(voiceChannel -> userChannelId.set(voiceChannel.getId()))
                 .flatMap(voiceChannel -> {
                     jotatimer.set(StopWatch.createStarted());
                     return voiceChannel.join();
                 })
+                .doOnNext(voiceConnection -> botChannelId.set(voiceConnection.getChannelId()))
                 .flatMap(voiceConnection -> {
                     event.getClient().getEventDispatcher().on(VoiceStateUpdateEvent.class)
                             .filter(voiceStateUpdateEvent ->
                                     voiceStateUpdateEvent.getCurrent().getUserId().equals(Snowflake.of(targetUserId)))
                             .subscribe(voiceStateUpdateEvent -> {
-                                if (voiceStateUpdateEvent.getCurrent().getChannelId().isEmpty()) {
-                                    voiceConnection.disconnect();
+                                if (!userChannelId.get().equals(botChannelId.get())) {
+                                    event.getGuild()
+                                            .flatMap(guild -> guild.getMemberById(Snowflake.of(targetUserId)).flatMap(Member::getVoiceState))
+                                            .flatMap(VoiceState::getChannel)
+                                            .flatMap(VoiceChannel::join)
+                                            .subscribe();
                                 }
                             });
 
