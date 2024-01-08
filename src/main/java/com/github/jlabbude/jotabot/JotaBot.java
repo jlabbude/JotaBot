@@ -26,8 +26,8 @@ public class JotaBot {
                 .login()
                 .block();
 
-        new jotaJoin(new jotaStream(), 277898997975482379L)
-                .execute("jotajoin", new MessageCreateEvent(client, null, null, 852717593236471829L, null))
+        new jotaJoin(new jotaStream(), insertUserId)
+                .execute("jotajoin", new MessageCreateEvent(client, null, null, insertChannelId, null))
                 .subscribe();
 
         client.getEventDispatcher().on(MessageCreateEvent.class)
