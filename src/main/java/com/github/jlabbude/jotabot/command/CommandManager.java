@@ -16,7 +16,7 @@ public class CommandManager {
         // Initialize the map with command names and their implementations
         commands.put("jotave", new jotaGrito());
         jotaStream streamCommand = new jotaStream();
-        commands.put("jotajoin", new jotaJoin(streamCommand));
+        commands.put("jotajoin", new jotaJoin(streamCommand, insertUserId));
         // Add more commands as needed
     }
 
