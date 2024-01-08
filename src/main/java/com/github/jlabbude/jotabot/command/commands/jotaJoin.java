@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class jotaJoin implements SlashCommand {
 
     private final jotaStream streamCommand;
-    private final long targetUserId;  // Replace with the actual ID of the target user
+    private final long targetUserId;
 
     public jotaJoin(jotaStream streamCommand, long targetUserId) {
         this.streamCommand = streamCommand;
