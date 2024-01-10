@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 public class jotaStream implements SlashCommand {
-    private final long targetUserId = insertUserId;
+    private final long targetUserId = insertUseriD;
 
     @Override
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
