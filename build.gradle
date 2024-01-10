@@ -17,6 +17,22 @@ dependencies {
     implementation "com.twitter:twitter-api-java-sdk:2.0.3"
 }
 
+jar {
+
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
+    manifest{
+        attributes 'JotaBot' : 'com.github.jlabbude.jotabot.JotaBot'
+    }
+    from{
+        configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it)}
+    }
+}
+
 test {
     useJUnitPlatform()
+}
+
+configurations {
+    all*.exclude group: 'org.slf4j', module: 'slf4j-api'
 }
