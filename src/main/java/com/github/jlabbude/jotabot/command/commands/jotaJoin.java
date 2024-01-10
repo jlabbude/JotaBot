@@ -28,12 +28,9 @@ public class jotaJoin implements SlashCommand {
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
         AtomicReference<StopWatch> jotatimer = new AtomicReference<>();
 
-        AtomicReference<Snowflake> userChannelId = new AtomicReference<>();
-        AtomicReference<Mono<Snowflake>> botChannelId = new AtomicReference<>();
+        Snowflake targetChannelSnowflake = Snowflake.of(insertMsgChId);
 
-        Snowflake targetChannelSnowflake = Snowflake.of(insertchannelId);
-        Mono<TextChannel> channelTarget = event.getClient().getChannelById(targetChannelSnowflake)
-                .cast(TextChannel.class);
+        Mono<TextChannel> channelTarget = event.getClient().getChannelById(targetChannelSnowflake).cast(TextChannel.class);
 
         return event.getGuild()
                 .flatMap(guild -> guild.getMemberById(Snowflake.of(targetUserId)))
@@ -41,25 +38,26 @@ public class jotaJoin implements SlashCommand {
                 .filter(vs -> !vs.isSelfStreaming())
                 .switchIfEmpty(Mono.empty())
                 .flatMap(VoiceState::getChannel)
-                .doOnNext(voiceChannel -> userChannelId.set(voiceChannel.getId()))
                 .flatMap(voiceChannel -> {
                     jotatimer.set(StopWatch.createStarted());
                     return voiceChannel.join();
                 })
-                .doOnNext(voiceConnection -> botChannelId.set(voiceConnection.getChannelId()))
+
                 .flatMap(voiceConnection -> {
                     event.getClient().getEventDispatcher().on(VoiceStateUpdateEvent.class)
                             .filter(voiceStateUpdateEvent ->
-                                    voiceStateUpdateEvent.getCurrent().getUserId().equals(Snowflake.of(targetUserId)))
-                            .subscribe(voiceStateUpdateEvent -> {
-                                if (!userChannelId.get().equals(botChannelId.get())) {
-                                    event.getGuild()
-                                            .flatMap(guild -> guild.getMemberById(Snowflake.of(targetUserId)).flatMap(Member::getVoiceState))
-                                            .flatMap(VoiceState::getChannel)
-                                            .flatMap(VoiceChannel::join)
-                                            .subscribe();
-                                }
-                            });
+                                    voiceStateUpdateEvent.getCurrent().getUserId().equals(Snowflake.of(targetUserId)) &&
+                                            (voiceStateUpdateEvent.isJoinEvent()
+                                                    || voiceStateUpdateEvent.isLeaveEvent()
+                                                    || voiceStateUpdateEvent.isMoveEvent()
+                                            )
+                            )
+
+                            .subscribe(voiceStateUpdateEvent -> event.getGuild()
+                                    .flatMap(guild -> guild.getMemberById(Snowflake.of(targetUserId)).flatMap(Member::getVoiceState))
+                                    .flatMap(VoiceState::getChannel)
+                                    .flatMap(VoiceChannel::join)
+                                    .subscribe());
 
                     return streamCommand.execute("streamCommand", event)
                             .then(Mono.fromRunnable(() -> {
