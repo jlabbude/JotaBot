@@ -14,15 +14,15 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
     implementation 'com.discord4j:discord4j-core:3.2.6'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation "com.twitter:twitter-api-java-sdk:2.0.3"
 }
 
 jar {
 
     duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
 
-    manifest{
-        attributes 'JotaBot' : 'com.github.jlabbude.jotabot.JotaBot'
+    manifest {
+        attributes "Main-Class": "com.github.jlabbude.jotabot.JotaBot"
+        attributes "Class-Path": 'JotaBot-1.0-SNAPSHOT.jar'
     }
     from{
         configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it)}
