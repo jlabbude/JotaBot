@@ -24,11 +24,15 @@ public class JotaBot {
 =======
         new jotaJoin(new jotaStream(), insertUserId)
 <<<<<<< HEAD
+<<<<<<< HEAD
                 .execute("jotajoin", new MessageCreateEvent(client, null, null, insertChannelId, null))
 >>>>>>> 957fa19 (removed ids)
 =======
                 .execute("jotajoin", new MessageCreateEvent(client, null, null, 852717593236471829L, null))
 >>>>>>> 3436ef8 (optimize imports)
+=======
+                .execute("jotajoin", new MessageCreateEvent(client, null, null, insertGuildId, null))
+>>>>>>> 6b3dac5 (Update JotaBot.java)
                 .subscribe();
 
         client.getEventDispatcher().on(MessageCreateEvent.class)
