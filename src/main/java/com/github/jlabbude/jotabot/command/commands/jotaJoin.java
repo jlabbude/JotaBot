@@ -1,6 +1,6 @@
 package com.github.jlabbude.jotabot.command.commands;
 
-import com.github.jlabbude.jotabot.command.SlashCommand;
+import com.github.jlabbude.jotabot.command.ChatCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class jotaJoin implements SlashCommand {
+public class jotaJoin implements ChatCommand {
 
     private final jotaStream streamCommand;
     private final long targetUserId;

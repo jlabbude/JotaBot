@@ -3,7 +3,7 @@ package com.github.jlabbude.jotabot.command;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import reactor.core.publisher.Mono;
 
-public class SlashCommandListener {
+public class ChatCommandListener {
     public static Mono<Void> execute(MessageCreateEvent event, CommandManager commandManager) {
         String content = event.getMessage().getContent();
         String commandName = extractCommandName(content);

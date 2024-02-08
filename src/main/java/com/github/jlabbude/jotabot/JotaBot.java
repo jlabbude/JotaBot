@@ -1,7 +1,7 @@
 package com.github.jlabbude.jotabot;
 
 import com.github.jlabbude.jotabot.command.CommandManager;
-import com.github.jlabbude.jotabot.command.SlashCommandListener;
+import com.github.jlabbude.jotabot.command.ChatCommandListener;
 import com.github.jlabbude.jotabot.command.commands.jotaJoin;
 import com.github.jlabbude.jotabot.command.commands.jotaStream;
 import discord4j.core.DiscordClientBuilder;
@@ -37,7 +37,7 @@ public class JotaBot {
 
         client.getEventDispatcher().on(MessageCreateEvent.class)
                 .filter(event -> event.getMessage().getContent().startsWith("&"))
-                .flatMap(event -> SlashCommandListener.execute(event, commandManager))
+                .flatMap(event -> ChatCommandListener.execute(event, commandManager))
                 .subscribe();
 
         client.onDisconnect().block();
