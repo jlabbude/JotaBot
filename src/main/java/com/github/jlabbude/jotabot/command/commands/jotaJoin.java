@@ -42,16 +42,11 @@ public class jotaJoin implements ChatCommand {
                     jotatimer.set(StopWatch.createStarted());
                     return voiceChannel.join();
                 })
-
                 .flatMap(voiceConnection -> {
                     event.getClient().getEventDispatcher().on(VoiceStateUpdateEvent.class)
                             .filter(voiceStateUpdateEvent ->
                                     voiceStateUpdateEvent.getCurrent().getUserId().equals(Snowflake.of(targetUserId)) &&
-                                            (voiceStateUpdateEvent.isJoinEvent()
-                                                    || voiceStateUpdateEvent.isLeaveEvent()
-                                                    || voiceStateUpdateEvent.isMoveEvent()
-                                            )
-                            )
+                                            (voiceStateUpdateEvent.isJoinEvent() || voiceStateUpdateEvent.isMoveEvent()))
 
                             .subscribe(voiceStateUpdateEvent -> event.getGuild()
                                     .flatMap(guild -> guild.getMemberById(Snowflake.of(targetUserId)).flatMap(Member::getVoiceState))
@@ -74,9 +69,7 @@ public class jotaJoin implements ChatCommand {
 
                                 channelTarget.subscribe(textChannel ->
                                         textChannel.createMessage(formattedElapsedTime).subscribe());
-
                             }))
-                            .then(voiceConnection.disconnect())
                             .then(Mono.defer(() -> execute("jotajoin", event)));
                 })
                 .repeatWhenEmpty(repeat -> repeat.delayElements(Duration.ofSeconds(1)));
