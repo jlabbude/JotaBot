@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandManager {
-    private final Map<String, SlashCommand> commands = new HashMap<>();
+    private final Map<String, ChatCommand> commands = new HashMap<>();
 
     public CommandManager() {
         commands.put("jotave", new jotaGrito());
