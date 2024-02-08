@@ -15,11 +15,13 @@ public class CommandManager {
     public CommandManager() {
         commands.put("jotave", new jotaGrito());
         jotaStream streamCommand = new jotaStream();
-        commands.put("jotajoin", new jotaJoin(streamCommand, insertUserID);
+        commands.put("jotajoin", new jotaJoin(streamCommand, insertUserID));
     }
 
     public Mono<Void> executeCommand(String commandName, MessageCreateEvent event) {
         return Mono.justOrEmpty(commands.get(commandName))
                 .flatMap(command -> command.execute(commandName, event));
     }
+
+
 }
