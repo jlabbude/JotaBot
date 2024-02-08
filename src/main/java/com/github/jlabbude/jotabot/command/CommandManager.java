@@ -13,15 +13,12 @@ public class CommandManager {
     private final Map<String, SlashCommand> commands = new HashMap<>();
 
     public CommandManager() {
-        // Initialize the map with command names and their implementations
         commands.put("jotave", new jotaGrito());
         jotaStream streamCommand = new jotaStream();
-        commands.put("jotajoin", new jotaJoin(streamCommand, insertUserID));
-        // Add more commands as needed
+        commands.put("jotajoin", new jotaJoin(streamCommand, insertUserID);
     }
 
     public Mono<Void> executeCommand(String commandName, MessageCreateEvent event) {
-        // Get the command implementation from the map and execute it
         return Mono.justOrEmpty(commands.get(commandName))
                 .flatMap(command -> command.execute(commandName, event));
     }
