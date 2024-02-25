@@ -2,12 +2,10 @@ package com.github.jlabbude.jotabot.command.commands;
 
 import com.github.jlabbude.jotabot.command.ChatCommand;
 import discord4j.common.util.Snowflake;
-import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.channel.TextChannel;
-import discord4j.core.object.entity.channel.VoiceChannel;
 import org.apache.commons.lang3.time.StopWatch;
 import reactor.core.publisher.Mono;
 
@@ -43,37 +41,23 @@ public class JotaJoin implements ChatCommand {
                 jotatimer.set(StopWatch.createStarted());
                 return voiceChannel.getVoiceConnection();
             })
-            .flatMap(voiceConnection -> {
-                event.getClient().getEventDispatcher().on(VoiceStateUpdateEvent.class)
-                    .filter(voiceStateUpdateEvent ->
-                    voiceStateUpdateEvent.getCurrent().getUserId().equals(Snowflake.of(insertUserId))
-                    && (voiceStateUpdateEvent.isJoinEvent() || voiceStateUpdateEvent.isMoveEvent()))
+            .flatMap(voiceConnection -> streamCommand.execute("streamCommand", event)
+                .then(Mono.fromRunnable(() -> {
+                    jotatimer.get().stop();
 
-                    .subscribe(voiceStateUpdateEvent -> event.getGuild()
-                        .flatMap(guild -> guild.getMemberById(Snowflake.of(insertUserId))
-                            .flatMap(Member::getVoiceState))
-                        .flatMap(VoiceState::getChannel)
-                        .flatMap(VoiceChannel::join)
-                        .subscribe());
+                    Duration elapsedDuration = Duration.ofMillis(jotatimer.get().getTime());
 
-                return streamCommand.execute("streamCommand", event)
-                    .then(Mono.fromRunnable(() -> {
-                        jotatimer.get().stop();
+                    long hours = elapsedDuration.toHours();
+                    long minutes = elapsedDuration.toMinutesPart();
+                    long seconds = elapsedDuration.toSecondsPart();
 
-                        Duration elapsedDuration = Duration.ofMillis(jotatimer.get().getTime());
+                    String formattedElapsedTime = String.format("Jotave demorou %d horas, %d minutos, %d segundos para compartilhar a tela.",
+                    hours, minutes, seconds);
 
-                        long hours = elapsedDuration.toHours();
-                        long minutes = elapsedDuration.toMinutesPart();
-                        long seconds = elapsedDuration.toSecondsPart();
-
-                        String formattedElapsedTime = String.format("Jotave demorou %d horas, %d minutos, %d segundos para compartilhar a tela.",
-                        hours, minutes, seconds);
-
-                        channelTarget.subscribe(textChannel ->
-                        textChannel.createMessage(formattedElapsedTime).subscribe());
-                    }))
-                    .then(Mono.defer(() -> execute("jotajoin", event)));
-            })
+                    channelTarget.subscribe(textChannel ->
+                    textChannel.createMessage(formattedElapsedTime).subscribe());
+                }))
+                .then(Mono.defer(() -> execute("jotajoin", event))))
             .repeatWhenEmpty(repeat -> repeat.delayElements(Duration.ofSeconds(1)));
     }
 }
