@@ -47,7 +47,7 @@ public class JotaAvatar implements ChatCommand {
                             throw new RuntimeException(e);
                         }
 
-                        guild.getClient().edit(spec -> spec.setAvatar(Image.ofRaw(baos.toByteArray(), Image.Format.PNG))).block();
+                        guild.getClient().edit().withAvatar(Image.ofRaw(baos.toByteArray(), Image.Format.PNG)).block();
                     })))
             .then();
     }
