@@ -9,7 +9,7 @@ public class JotaGrito implements ChatCommand {
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
 
         return event.getMessage().getChannel()
-            .flatMap(channel -> channel.createMessage("https://tenor.com/view/astrojv-madshours-gif-18797381"))
+            .flatMap(channel -> channel.createMessage("https://tenor.com/view/astrojv-madshours-gif-18804356"))
             .then();
     }
 }

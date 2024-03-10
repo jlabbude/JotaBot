@@ -25,16 +25,16 @@ public class JotaPersistentJoin implements ChatCommand {
                                 .filter(voiceStateUpdateEvent ->
                                     voiceStateUpdateEvent.isLeaveEvent() || voiceStateUpdateEvent.isMoveEvent())
 
-                                .subscribe(voiceStateUpdateEvent -> event.getGuild()
+                                .flatMap(voiceStateUpdateEvent -> event.getGuild()
                                     .flatMap(guild2 -> guild.getMemberById(Snowflake.of(insertUserId))
                                         .flatMap(Member::getVoiceState))
 
                                     .flatMap(VoiceState::getChannel)
                                     .flatMap(VoiceChannel::join)
-                                    .subscribe());
+                                    .then());
 
                             return Mono.empty();
-                        }))
-            .then();
+                        })
+            );
     }
 }

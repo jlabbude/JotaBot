@@ -5,6 +5,7 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.rest.util.Image;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,6 +23,7 @@ public class JotaAvatar implements ChatCommand {
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
         return event.getGuild()
             .flatMap(guild -> guild.getMemberById(Snowflake.of(insertUserId))
+                    .publishOn(Schedulers.boundedElastic())
             .map(member ->
                 member.getAvatar()
                     .subscribe(image -> {
@@ -47,8 +49,9 @@ public class JotaAvatar implements ChatCommand {
                             throw new RuntimeException(e);
                         }
 
-                        guild.getClient().edit().withAvatar(Image.ofRaw(baos.toByteArray(), Image.Format.PNG)).block();
-                    })))
+                        guild.getClient().edit().withAvatar(Image.ofRaw(baos.toByteArray(), Image.Format.PNG)).subscribe();
+                    })
+            ))
             .then();
     }
 }

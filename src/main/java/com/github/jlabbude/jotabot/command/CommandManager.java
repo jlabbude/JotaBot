@@ -1,6 +1,9 @@
 package com.github.jlabbude.jotabot.command;
 
-import com.github.jlabbude.jotabot.command.commands.*;
+import com.github.jlabbude.jotabot.command.commands.JotaAvatar;
+import com.github.jlabbude.jotabot.command.commands.JotaGrito;
+import com.github.jlabbude.jotabot.command.commands.JotaJoin;
+import com.github.jlabbude.jotabot.command.commands.JotaPersistentJoin;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import reactor.core.publisher.Mono;
 
@@ -12,8 +15,7 @@ public class CommandManager {
 
     public CommandManager() {
         commands.put("jotave", new JotaGrito());
-        JotaStream streamCommand = new JotaStream();
-        commands.put("jotajoin", new JotaJoin(streamCommand));
+        commands.put("jotajoin", new JotaJoin());
         commands.put("join", new JotaPersistentJoin());
         commands.put("jotafoto", new JotaAvatar());
     }

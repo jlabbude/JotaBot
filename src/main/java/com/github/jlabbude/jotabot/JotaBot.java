@@ -4,10 +4,14 @@ import com.github.jlabbude.jotabot.command.ChatCommandListener;
 import com.github.jlabbude.jotabot.command.CommandManager;
 import com.github.jlabbude.jotabot.command.commands.JotaJoin;
 import com.github.jlabbude.jotabot.command.commands.JotaPersistentJoin;
-import com.github.jlabbude.jotabot.command.commands.JotaStream;
+import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
+import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.VoiceState;
+import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.channel.VoiceChannel;
 
 public class JotaBot {
 
@@ -23,12 +27,22 @@ public class JotaBot {
             .login()
             .block();
 
-        new JotaPersistentJoin()
-            .execute("join", new MessageCreateEvent(client, null, null, insertGuildId, null))
+        //stupid fix, but I don't want to mess with this bot any longer so this'll do anyway
+
+        client.getMemberById(Snowflake.of(insertGuildId), Snowflake.of(insertUserId))
+            .flatMap(Member::asFullMember).flatMap(member -> member.getVoiceState())
+            .flatMap(VoiceState::getChannel)
+            .flatMap(VoiceChannel::join)
             .subscribe();
 
-        new JotaJoin(new JotaStream())
-            .execute("jotajoin", new MessageCreateEvent(client, null, null, insertGuildId, null))
+        client.getEventDispatcher().on(VoiceStateUpdateEvent.class)
+            .flatMap(event -> new JotaPersistentJoin()
+                .execute("join", new MessageCreateEvent(client, null, null, insertGuildId, null)))
+            .subscribe();
+
+        client.getEventDispatcher().on(VoiceStateUpdateEvent.class)
+            .flatMap(event -> new JotaJoin()
+                    .execute("jotajoin", new MessageCreateEvent(client, null, null, insertGuildId, null)))
             .subscribe();
 
         client.getEventDispatcher().on(MessageCreateEvent.class)
