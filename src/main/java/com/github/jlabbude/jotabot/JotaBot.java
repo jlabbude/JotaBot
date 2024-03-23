@@ -23,24 +23,10 @@ public class JotaBot {
             .login()
             .block();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        new jotaJoin(new jotaStream(), insertUsedId)
+        new JotaJoin(new JotaStream())
                 .execute("jotajoin", new MessageCreateEvent(client, null, null, insertGuildId, null))
-=======
-        new jotaJoin(new jotaStream(), insertUserId)
-<<<<<<< HEAD
-<<<<<<< HEAD
-                .execute("jotajoin", new MessageCreateEvent(client, null, null, insertChannelId, null))
->>>>>>> 957fa19 (removed ids)
-=======
-                .execute("jotajoin", new MessageCreateEvent(client, null, null, 852717593236471829L, null))
->>>>>>> 3436ef8 (optimize imports)
-=======
-                .execute("jotajoin", new MessageCreateEvent(client, null, null, insertGuildId, null))
->>>>>>> 6b3dac5 (Update JotaBot.java)
                 .subscribe();
-=======
+
         new JotaPersistentJoin()
             .execute("join", new MessageCreateEvent(client, null, null, insertGuildId, null))
             .subscribe();
@@ -48,7 +34,6 @@ public class JotaBot {
         new JotaJoin(new JotaStream())
             .execute("jotajoin", new MessageCreateEvent(client, null, null, insertGuildId, null))
             .subscribe();
->>>>>>> 4fd8b40 (improved readability and added global variables, plus 2 new features)
 
         client.getEventDispatcher().on(MessageCreateEvent.class)
             .filter(event -> event.getMessage().getContent().startsWith("&"))
