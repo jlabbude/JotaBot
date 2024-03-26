@@ -7,7 +7,7 @@ A Discord bot to track the time one of my friends took to start screensharing
 !["Jotave took 0 hours, 48 minutes, 7 seconds to start screensharing"](https://i.imgur.com/vIBivSU.png)
 
 
-## Environment Variables
+## Making it work
 
 ### IDs to track
 
