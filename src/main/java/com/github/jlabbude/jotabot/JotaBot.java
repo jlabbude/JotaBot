@@ -20,9 +20,9 @@ public class JotaBot {
 
     //For my application/intention with this bot, it's better to hardcode
     //all of this stuff.
-    public static final long insertUserId = 525726922500472832L;
-    public static final long insertGuildId = 852717593236471829L;
-    public static final long insertMsgChId = 852717593236471832L;
+    public static final long insertUserId = 0L;
+    public static final long insertGuildId = 0L;
+    public static final long insertMsgChId = 0L;
 
     public static void main(String[] args) throws IOException {
 
