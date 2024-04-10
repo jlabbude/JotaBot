@@ -22,3 +22,4 @@ gradle-app.setting
 /src/main/resources/
 /.idea/
 /bin/
+/src/main/resources/keys/package.json

@@ -1,5 +1,6 @@
 package com.github.jlabbude.jotabot.command.commands;
 
+import com.github.jlabbude.jotabot.JotaBot;
 import com.github.jlabbude.jotabot.command.ChatCommand;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
@@ -9,10 +10,7 @@ import reactor.core.publisher.Mono;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import static com.github.jlabbude.jotabot.JotaBot.insertUserId;
 
@@ -29,7 +27,9 @@ public class JotaAvatar implements ChatCommand {
                         BufferedImage bufferedNoSign;
                         try {
                             bufferedImage = ImageIO.read(new ByteArrayInputStream(image.getData()));
-                            bufferedNoSign = ImageIO.read(new File("src/main/resources/image/nosign.png"));
+                            InputStream inputStream = JotaBot.class.getResourceAsStream("/image/nosign.png");
+                            assert inputStream != null;
+                            bufferedNoSign = ImageIO.read(inputStream);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

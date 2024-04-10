@@ -14,6 +14,8 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
     implementation 'com.discord4j:discord4j-core:3.2.6'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'io.github.redouane59.twitter:twittered:2.23'
+    implementation 'org.slf4j:slf4j-simple:1.7.32'
 }
 
 jar {
@@ -34,5 +36,5 @@ test {
 }
 
 configurations {
-    all*.exclude group: 'org.slf4j', module: 'slf4j-api'
+    //all*.exclude group: 'org.slf4j', module: 'slf4j-api'
 }

@@ -5,11 +5,13 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import reactor.core.publisher.Mono;
 
 public class JotaGrito implements ChatCommand {
+
     @Override
     public Mono<Void> execute(String commandName, MessageCreateEvent event) {
 
         return event.getMessage().getChannel()
-            .flatMap(channel -> channel.createMessage("https://tenor.com/view/astrojv-madshours-gif-18797381"))
+            .flatMap(channel -> channel.createMessage("JOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"))
             .then();
     }
+
 }
