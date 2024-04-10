@@ -51,7 +51,8 @@ public class JotaJoin implements ChatCommand {
 
                     //build the string for dynamic mentioning
                     //on discord message channel
-                    String jotaNome = "<@" + insertUserId + ">";
+                    String jotaMention = "<@" + insertUserId + ">";
+                    String jotaNome = "Jotave";
 
                     Duration elapsedDuration = Duration.ofMillis(jotatimer.get().getTime());
 
@@ -59,17 +60,17 @@ public class JotaJoin implements ChatCommand {
                     long minutes = elapsedDuration.toMinutesPart();
                     long seconds = elapsedDuration.toSecondsPart();
 
-                    String formattedElapsedTime = String.format("%s demorou %d horas, %d minutos, %d segundos para compartilhar a tela.",
-                            jotaNome, hours, minutes, seconds);
                     //idk how to do this better
                     //todo will think of something better for this later
-                    String formattedElapsedTime4Twitter = String.format("Jotave demorou %d horas, %d minutos, %d segundos para compartilhar a tela.",
-                            hours, minutes, seconds);
+                    String preFormattedTime = "%s demorou %d horas, %d minutos, %d segundos para compartilhar a tela.";
 
                     channelTarget.subscribe(textChannel ->
-                    textChannel.createMessage(formattedElapsedTime).subscribe());
+                        textChannel.createMessage(
+                            String.format(preFormattedTime, jotaMention, hours, minutes, seconds))
+                        .subscribe());
 
-                    getTwitterClient().postTweet(formattedElapsedTime4Twitter);
+                    getTwitterClient().postTweet(
+                        String.format(preFormattedTime, jotaNome, hours, minutes, seconds));
 
                 }))
                 .then(Mono.defer(() -> execute("jotajoin", event))))
