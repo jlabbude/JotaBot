@@ -51,8 +51,7 @@ public class JotaJoin implements ChatCommand {
 
                     //build the string for dynamic mentioning
                     //on discord message channel
-                    String jotaNome = "<@";
-                    jotaNome += insertUserId + ">";
+                    String jotaNome = "<@" + insertUserId + ">";
 
                     Duration elapsedDuration = Duration.ofMillis(jotatimer.get().getTime());
 
